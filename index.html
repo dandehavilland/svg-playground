@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>SVG</title>
+
+    <script src="js/imports.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/playground.js" type="text/javascript" charset="utf-8" defer="defer"></script>
+
+    <style type="text/css" media="screen">
+      svg path.wall {
+        fill: none;
+        stroke: black;
+      }
+
+      svg circle.poi {
+        fill: green;
+        stroke: black;
+      }
+
+      svg path.path {
+        fill: none;
+        stroke: black;
+      }
+
+      svg circle.intersection {
+        fill: red;
+        stroke: black;
+        stroke-width: 0.5px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="1200" height="800">
+      <g id="walls"></g>
+      <g id="pois"></g>
+      <g id="paths"></g>
+      <g id="intersections"></g>
+    </svg>
+  </body>
+</html>
