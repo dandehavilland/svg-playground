@@ -12,7 +12,11 @@ window.calcIntersections = function(subjectPath, otherPath) {
   for (var i = 0; i < pb.length-1; i++) {
     var intersection = Isx.intersectLineLine(pa[0], pa[1], pb[i], pb[i+1]);
     if (intersection.status === 'Intersection') {
-      result.push(intersection);
+      result.push({
+        fullPath: otherPath,
+        points: [pb[i], pb[i+1]],
+        intersection: intersection
+      });
     }
   }
 
@@ -22,6 +26,12 @@ window.calcIntersections = function(subjectPath, otherPath) {
 window.pathData = function(d) {
   var p = d.points;
   switch (d.type) {
+  case 'T':
+    return [
+      'M', p[0].x, ' ', p[0].y,
+      'T', p[1].x, ' ', p[1].y,
+      ' ', p[2].x, ' ', p[2].y
+    ].join('');
   case 'Q':
     return [
       'M', p[0].x, ' ', p[0].y,
@@ -59,8 +69,34 @@ window.elemLabel = function(d, idx) {
   return d.label || this.tagName + idx;
 }
 
-window.getAngle = function(point) {
-  return Math.atan2(point.y, point.x) * 180 / Math.PI;
+window.getAngle = function(pointA, pointB) {
+  var dy = pointB.y - pointA.y;
+  var dx = pointB.x - pointA.x;
+  var theta = Math.atan2(dy, dx); // range (-PI, PI]
+  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+  return theta;
+}
+
+window.appendCircle = function(cx, cy) {
+d3.select('svg g#intersections')
+  .append('circle')
+  .classed('intersection', true)
+  .attr({
+    cx: cx,
+    cy: cy,
+    r: 5
+  });
+}
+
+window.getClosestPoint = function(subject, start, end) {
+  var thetaStart = subject.y - start.y;
+  var thetaEnd = end.y - subject.y;
+
+  if (thetaStart <= thetaEnd) {
+    return start;
+  } else {
+    return end;
+  }
 }
 
 },{"../node_modules/d3/d3.js":2,"../node_modules/jquery/dist/jquery.js":3,"../node_modules/kld-intersections/index.js":4}],2:[function(require,module,exports){

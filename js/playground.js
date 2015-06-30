@@ -43,25 +43,45 @@ d3.select('svg g#paths')
     .attr('d', pathData);
 
 // calculate intersections points for the test path
-var intersections = [];
+var intersectingLines = [];
 walls.forEach(function(wall, idx) {
-  intersections = intersections.concat(calcIntersections(firstPath, wall));
+  intersectingLines = intersectingLines.concat(calcIntersections(firstPath, wall));
 });
 
-intersections = intersections
-  .filter(function(intersection) {
-    return intersection.status === 'Intersection';
+intersectingLines = intersectingLines
+  .filter(function(line) {
+    return line.intersection.status === 'Intersection';
   });
 
 // display intersections
-intersections.forEach(function(intersection) {
-  d3.select('svg g#intersections')
-    .append('circle')
-    .datum(intersection)
-    .classed('intersection', true)
-    .attr({
-      cx: intersection.points[0].x,
-      cy: intersection.points[0].y,
-      r: 5
-    });
+intersectingLines.forEach(function(line) {
+  appendCircle(line.intersection.points[0].x, line.intersection.points[0].y);
+});
+
+intersectingLines.forEach(function(line) {
+  var angle = getAngle(line.points[0], line.points[1]);
+  var subject = line.intersection.points[0];
+
+  // if line is north->south
+  if (angle === 90) {
+    var closestPoint = getClosestPoint(subject, line.points[0], line.points[1]);
+
+    appendCircle(closestPoint.x, closestPoint.y);
+
+    var newPoints = firstPath.points.slice();
+    newPoints.splice(1, 0, closestPoint);
+
+    var newPath = {
+      type: 'Q',
+      points: newPoints
+    };
+
+    d3.select('svg g#paths')
+      .append('path')
+        .classed('path', true)
+        .datum(newPath)
+        .attr('d', pathData);
+  }
+
+  console.log(angle);
 });
