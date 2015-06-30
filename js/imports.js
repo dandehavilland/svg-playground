@@ -73,7 +73,7 @@ window.getAngle = function(pointA, pointB) {
   var dy = pointB.y - pointA.y;
   var dx = pointB.x - pointA.x;
   var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+  //theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
   return theta;
 }
 
@@ -97,6 +97,13 @@ window.getClosestPoint = function(subject, start, end) {
   } else {
     return end;
   }
+}
+
+window.transposePoint = function(point, angle, amount) {
+  return {
+    x: point.x + (Math.cos(angle) * amount),
+    y: point.y + (Math.sin(angle) * amount),
+  };
 }
 
 },{"../node_modules/d3/d3.js":2,"../node_modules/jquery/dist/jquery.js":3,"../node_modules/kld-intersections/index.js":4}],2:[function(require,module,exports){

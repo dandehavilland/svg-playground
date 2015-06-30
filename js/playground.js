@@ -62,26 +62,31 @@ intersectingLines.forEach(function(line) {
   var angle = getAngle(line.points[0], line.points[1]);
   var subject = line.intersection.points[0];
 
-  // if line is north->south
-  if (angle === 90) {
+  line.intersection.points.forEach(function(subject) {
     var closestPoint = getClosestPoint(subject, line.points[0], line.points[1]);
+
+    var transposeAmount;
+    if (closestPoint.y < subject.y) {
+      transposeAmount = -20;
+    } else {
+      transposeAmount = 20;
+    }
+
+    var amendedPoint = transposePoint(closestPoint, angle, transposeAmount);
 
     appendCircle(closestPoint.x, closestPoint.y);
 
-    var newPoints = firstPath.points.slice();
-    newPoints.splice(1, 0, closestPoint);
-
-    var newPath = {
-      type: 'Q',
-      points: newPoints
-    };
-
-    d3.select('svg g#paths')
-      .append('path')
-        .classed('path', true)
-        .datum(newPath)
-        .attr('d', pathData);
-  }
-
-  console.log(angle);
+    firstPath.points.splice(-1, 0, amendedPoint);
+  });
 });
+
+var lineGen = d3.svg.line()
+  .x(function(d) { return d.x; })
+  .y(function(d) { return d.y; })
+  .interpolate('cardinal');
+
+d3.select('svg g#paths')
+  .append('path')
+    .classed('path alternative', true)
+    .datum(firstPath.points)
+    .attr('d', lineGen);
