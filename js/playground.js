@@ -90,3 +90,20 @@ d3.select('svg g#paths')
     .classed('path alternative', true)
     .datum(firstPath.points)
     .attr('d', lineGen);
+
+
+intersectiongLines = [];
+walls.forEach(function(wall, idx) {
+  intersectingLines = intersectingLines.concat(calcIntersections(firstPath, wall));
+});
+
+intersectingLines = intersectingLines
+  .filter(function(line) {
+    return line.intersection.status === 'Intersection';
+  });
+
+  console.log(intersectingLines);
+
+intersectingLines.forEach(function(line) {
+  appendCircle(line.intersection.points[0].x, line.intersection.points[0].y);
+});

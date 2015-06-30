@@ -9,16 +9,20 @@ window.calcIntersections = function(subjectPath, otherPath) {
       pb = otherPath.points,
       result = [];
 
-  for (var i = 0; i < pb.length-1; i++) {
-    var intersection = Isx.intersectLineLine(pa[0], pa[1], pb[i], pb[i+1]);
-    if (intersection.status === 'Intersection') {
-      result.push({
-        fullPath: otherPath,
-        points: [pb[i], pb[i+1]],
-        intersection: intersection
-      });
+  for (var i = 0; i < pa.length-1; i++) {
+    for (var j = 0; j < pb.length-1; j++) {
+      var intersection = Isx.intersectLineLine(pa[i], pa[i+1], pb[j], pb[j+1]);
+      if (intersection.status === 'Intersection') {
+        result.push({
+          fullPath: otherPath,
+          points: [pb[j], pb[j+1]],
+          intersection: intersection
+        });
+      }
     }
   }
+
+
 
   return result;
 };
