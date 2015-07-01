@@ -1,3 +1,10 @@
+window.showIntersections = function(intersectingLines) {
+  intersectingLines.forEach(function(line) {
+    var points = line.intersection.points;
+    appendCircle(points[0]);
+  });
+};
+
 window.pathToPoints = function(pathString) {
   var segments = pathString.split(/([clhvstqma][\d,.\s]+)/ig)
     .filter(function(segment) {

@@ -6,7 +6,8 @@ var firstPath = {
   points: [
     {x: pois[0].cx, y: pois[0].cy},
     {x: pois[1].cx, y: pois[1].cy},
-  ]
+  ],
+  intersections: []
 };
 
 // draw the walls
@@ -46,10 +47,7 @@ d3.select('svg g#paths')
 var intersectingLines = findIntersections(firstPath, walls);
 
 // display intersections
-intersectingLines.forEach(function(line) {
-  var points = line.intersection.points;
-  appendCircle(points[0]);
-});
+showIntersections(intersectingLines);
 
 // extrapolate new coordinates based on intersections
 intersectingLines.forEach(function(line) {
@@ -86,34 +84,25 @@ d3.select('svg g#paths')
 
 intersectingLines = findIntersections(firstPath, [walls[6]]);
 
+showIntersections(intersectingLines);
+
 intersectingLines.forEach(function(line) {
-  appendCircle(line.intersection.points[0]);
+  var angle = getAngle(line.points[0], line.points[1]);
+
+  line.intersection.points
+    .forEach(function(subject) {
+      var points = line.points;
+      var closestIntersection = getClosestPoint(subject, points[0], points[1]);
+
+      var transposeAmount = 20;
+      if (closestIntersection.y < subject.y) {
+        transposeAmount = -transposeAmount;
+      }
+
+      var amendedPoint = transposePoint(closestIntersection, angle, transposeAmount);
+
+      // appendCircle(closestIntersection);
+
+      firstPath.points.splice(-1, 0, amendedPoint);
+    });
 });
-
-// display intersections
-// intersectingLines.forEach(function(line) {
-//   console.log(line);
-//   var points = line.intersection.points;
-//   appendCircle(points[0]);
-// });
-
-// intersectingLines.forEach(function(line) {
-//   var angle = getAngle(line.points[0], line.points[1]);
-//
-//   line.intersection.points
-//     .forEach(function(subject) {
-//       var points = line.points;
-//       var closestIntersection = getClosestPoint(subject, points[0], points[1]);
-//
-//       var transposeAmount = 20;
-//       if (closestIntersection.y < subject.y) {
-//         transposeAmount = -transposeAmount;
-//       }
-//
-//       var amendedPoint = transposePoint(closestIntersection, angle, transposeAmount);
-//
-//       appendCircle(closestIntersection);
-//
-//       firstPath.points.splice(-1, 0, amendedPoint);
-//     });
-// });
