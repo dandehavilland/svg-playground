@@ -1,8 +1,40 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-window.KLD = require('../node_modules/kld-intersections/index.js');
-window.Isx = KLD.Intersection;
-window.d3 = require('../node_modules/d3/d3.js');
-window.jQuery = require('../node_modules/jquery/dist/jquery.js');
+window.pathToPoints = function(pathString) {
+  var segments = pathString.split(/([clhvstqma][\d,.\s]+)/ig)
+    .filter(function(segment) {
+      return segment.length > 0;
+    });
+
+  var output = [];
+
+  for (var i = 1; i < segments.length; i++) {
+    var previousSegment = segments[i-1].slice(1);
+    var prevPoint = previousSegment.split(',').slice(-2);
+
+    var type = segments[i].slice(0,1);
+    var currentSegment = segments[i].slice(1);
+    var coords = currentSegment.split(/([\d\.]+,[\d\.]+),?/g)
+      .filter(function(segment) {
+        return segment.length > 0;
+      });
+
+    var points = [prevPoint].concat(coords.map(function(coord) {
+      return coord.split(',');
+    }));
+
+    output.push({
+      type: type,
+      points: points.map(function(point) {
+        return {
+          x: point[0],
+          y: point[1]
+        };
+      })
+    });
+  }
+
+  return output;
+};
 
 window.calcIntersections = function(subjectPath, otherPath) {
   var pa = subjectPath.points,
@@ -21,9 +53,6 @@ window.calcIntersections = function(subjectPath, otherPath) {
       }
     }
   }
-
-
-
   return result;
 };
 
@@ -71,7 +100,7 @@ window.circle = function(d, idx) {
 
 window.elemLabel = function(d, idx) {
   return d.label || this.tagName + idx;
-}
+};
 
 window.getAngle = function(pointA, pointB) {
   var dy = pointB.y - pointA.y;
@@ -79,18 +108,19 @@ window.getAngle = function(pointA, pointB) {
   var theta = Math.atan2(dy, dx); // range (-PI, PI]
   //theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
   return theta;
-}
+};
 
-window.appendCircle = function(cx, cy) {
+window.appendCircle = function(datum) {
 d3.select('svg g#intersections')
   .append('circle')
+  .datum(datum)
   .classed('intersection', true)
   .attr({
-    cx: cx,
-    cy: cy,
+    cx: function(d) {return d.x; },
+    cy: function(d) {return d.y; },
     r: 5
   });
-}
+};
 
 window.getClosestPoint = function(subject, start, end) {
   var thetaStart = subject.y - start.y;
@@ -101,14 +131,29 @@ window.getClosestPoint = function(subject, start, end) {
   } else {
     return end;
   }
-}
+};
 
 window.transposePoint = function(point, angle, amount) {
   return {
     x: point.x + (Math.cos(angle) * amount),
     y: point.y + (Math.sin(angle) * amount),
   };
-}
+};
+
+window.findIntersections = function(subject, obstacles) {
+  return obstacles
+    .reduce(function(memo, obstacle, idx) {
+      return memo.concat(calcIntersections(subject, obstacle));
+    }, [])
+    .filter(function(line) {
+      return line.intersection.status === 'Intersection';
+    });
+};
+
+window.KLD = require('../node_modules/kld-intersections/index.js');
+window.Isx = KLD.Intersection;
+window.d3 = require('../node_modules/d3/d3.js');
+window.jQuery = require('../node_modules/jquery/dist/jquery.js');
 
 },{"../node_modules/d3/d3.js":2,"../node_modules/jquery/dist/jquery.js":3,"../node_modules/kld-intersections/index.js":4}],2:[function(require,module,exports){
 !function() {

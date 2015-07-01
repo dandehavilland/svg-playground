@@ -43,41 +43,34 @@ d3.select('svg g#paths')
     .attr('d', pathData);
 
 // calculate intersections points for the test path
-var intersectingLines = [];
-walls.forEach(function(wall, idx) {
-  intersectingLines = intersectingLines.concat(calcIntersections(firstPath, wall));
-});
-
-intersectingLines = intersectingLines
-  .filter(function(line) {
-    return line.intersection.status === 'Intersection';
-  });
+var intersectingLines = findIntersections(firstPath, walls);
 
 // display intersections
 intersectingLines.forEach(function(line) {
-  appendCircle(line.intersection.points[0].x, line.intersection.points[0].y);
+  var points = line.intersection.points;
+  appendCircle(points[0]);
 });
 
+// extrapolate new coordinates based on intersections
 intersectingLines.forEach(function(line) {
   var angle = getAngle(line.points[0], line.points[1]);
-  var subject = line.intersection.points[0];
 
-  line.intersection.points.forEach(function(subject) {
-    var closestPoint = getClosestPoint(subject, line.points[0], line.points[1]);
+  line.intersection.points
+    .forEach(function(subject) {
+      var points = line.points;
+      var closestIntersection = getClosestPoint(subject, points[0], points[1]);
 
-    var transposeAmount;
-    if (closestPoint.y < subject.y) {
-      transposeAmount = -20;
-    } else {
-      transposeAmount = 20;
-    }
+      var transposeAmount = 20;
+      if (closestIntersection.y < subject.y) {
+        transposeAmount = -transposeAmount;
+      }
 
-    var amendedPoint = transposePoint(closestPoint, angle, transposeAmount);
+      var amendedPoint = transposePoint(closestIntersection, angle, transposeAmount);
 
-    appendCircle(closestPoint.x, closestPoint.y);
+      appendCircle(closestIntersection);
 
-    firstPath.points.splice(-1, 0, amendedPoint);
-  });
+      firstPath.points.splice(-1, 0, amendedPoint);
+    });
 });
 
 var lineGen = d3.svg.line()
@@ -91,18 +84,7 @@ d3.select('svg g#paths')
     .datum(firstPath.points)
     .attr('d', lineGen);
 
-
-intersectiongLines = [];
-walls.forEach(function(wall, idx) {
-  intersectingLines = intersectingLines.concat(calcIntersections(firstPath, wall));
-});
-
-intersectingLines = intersectingLines
-  .filter(function(line) {
-    return line.intersection.status === 'Intersection';
-  });
-
-  console.log(intersectingLines);
+intersectiongLines = findIntersections(firstPath, walls);
 
 intersectingLines.forEach(function(line) {
   appendCircle(line.intersection.points[0].x, line.intersection.points[0].y);
