@@ -84,8 +84,36 @@ d3.select('svg g#paths')
     .datum(firstPath.points)
     .attr('d', lineGen);
 
-intersectiongLines = findIntersections(firstPath, walls);
+intersectingLines = findIntersections(firstPath, [walls[6]]);
 
 intersectingLines.forEach(function(line) {
-  appendCircle(line.intersection.points[0].x, line.intersection.points[0].y);
+  appendCircle(line.intersection.points[0]);
 });
+
+// display intersections
+// intersectingLines.forEach(function(line) {
+//   console.log(line);
+//   var points = line.intersection.points;
+//   appendCircle(points[0]);
+// });
+
+// intersectingLines.forEach(function(line) {
+//   var angle = getAngle(line.points[0], line.points[1]);
+//
+//   line.intersection.points
+//     .forEach(function(subject) {
+//       var points = line.points;
+//       var closestIntersection = getClosestPoint(subject, points[0], points[1]);
+//
+//       var transposeAmount = 20;
+//       if (closestIntersection.y < subject.y) {
+//         transposeAmount = -transposeAmount;
+//       }
+//
+//       var amendedPoint = transposePoint(closestIntersection, angle, transposeAmount);
+//
+//       appendCircle(closestIntersection);
+//
+//       firstPath.points.splice(-1, 0, amendedPoint);
+//     });
+// });
