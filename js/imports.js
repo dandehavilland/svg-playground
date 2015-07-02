@@ -7,7 +7,7 @@ window.getNextWaypoint = function(subject, waypoints, line) {
     var waypointDeltaX = waypoint.x - subject.x;
     var waypointDeltaY = waypoint.y - subject.y;
 
-    var waypointDelta = Math.sqrt(Math.abs((waypointDeltaX^2) + (waypointDeltaY^2)));
+    var waypointDelta = Math.sqrt(Math.abs(waypointDeltaX^2) + Math.abs(waypointDeltaY^2));
 
     console.log('waypoint', index, 'deltas', waypointDelta, delta);
 
