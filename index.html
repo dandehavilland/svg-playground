@@ -34,12 +34,21 @@
         stroke: black;
         stroke-width: 0.5px;
       }
+
+      svg circle.waypoint {
+        fill: blue;
+        stroke: black;
+        stroke-width: 0.5px;
+        opacity: 0.5;
+      }
     </style>
   </head>
   <body>
     <svg width="1200" height="800">
       <g id="walls"></g>
+      <g id="annotations"></g>
       <g id="pois"></g>
+      <g id="waypoints"></g>
       <g id="paths"></g>
       <g id="intersections"></g>
     </svg>

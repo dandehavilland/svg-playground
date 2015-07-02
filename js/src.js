@@ -1,3 +1,33 @@
+window.getNextWaypoint = function(subject, waypoints, line) {
+  var delta = 0,
+    closestWaypoint = null;
+
+  waypoints.forEach(function(waypoint, index) {
+    var waypointDeltaX = waypoint.x - subject.x;
+    var waypointDeltaY = waypoint.y - subject.y;
+
+    var waypointDelta = Math.sqrt(Math.abs((waypointDeltaX^2) + (waypointDeltaY^2)));
+
+    console.log('waypoint', index, 'deltas', waypointDelta, delta);
+
+    if (delta === 0 || waypointDelta < delta) {
+      var alreadyVisitingWaypoint = line.points
+        .filter(function(point) {
+          return (point.x === waypoint.x && point.y === waypoint.y);
+        });
+
+      if (alreadyVisitingWaypoint.length > 0) {
+        return;
+      }
+
+      delta = waypointDelta;
+      closestWaypoint = waypoint;
+    }
+  });
+
+  return closestWaypoint;
+};
+
 window.showIntersections = function(intersectingLines) {
   intersectingLines.forEach(function(line) {
     var points = line.intersection.points;

@@ -22,6 +22,33 @@ d3.select('svg g#walls')
       name: elemLabel
     });
 
+// annotate the wall coordinates
+var annotations = d3.select('svg g#annotations')
+  .selectAll('text.annotation')
+    .data(walls).enter();
+
+annotations.append('text')
+  .classed('annotation', true)
+  .attr({
+    x: function(d) { return d.points[0].x; },
+    y: function(d) { return d.points[0].y; },
+    'text-anchor': 'start'
+  })
+  .text(function(d) {
+    return ''+d.points[0].x+','+d.points[0].y;
+  });
+
+annotations.append('text')
+  .classed('annotation', true)
+  .attr({
+    x: function(d) { return d.points[d.points.length-1].x; },
+    y: function(d) { return d.points[d.points.length-1].y; },
+    'text-anchor': 'start'
+  })
+  .text(function(d) {
+    return ''+d.points[d.points.length-1].x+','+d.points[d.points.length-1].y;
+  });
+
 // draw the POIs
 d3.select('svg g#pois')
   .selectAll('circle.poi')
@@ -35,6 +62,30 @@ d3.select('svg g#pois')
       cy: function(d) { return d.cy; },
       r: function(d) { return d.r; },
     });
+
+d3.select('svg g#waypoints')
+  .selectAll('circle.waypoint')
+  .data(waypoints)
+  .enter()
+    .append('circle')
+    .classed('waypoint', true)
+    .attr({
+      cx: function(d) { return d.x; },
+      cy: function(d) { return d.y; },
+      r: 5
+    });
+
+d3.select('svg g#waypoints')
+  .selectAll('text.annotation')
+  .data(waypoints)
+  .enter()
+    .append('text')
+    .classed('annotation', true)
+    .attr({
+      x: function(d) { return d.x; },
+      y: function(d) { return d.y; }
+    })
+    .text(function(d, i) {return i;});
 
 // draw our test path
 d3.select('svg g#paths')
@@ -55,19 +106,8 @@ intersectingLines.forEach(function(line) {
 
   line.intersection.points
     .forEach(function(subject) {
-      var points = line.points;
-      var closestIntersection = getClosestPoint(subject, points[0], points[1]);
-
-      var transposeAmount = 20;
-      if (closestIntersection.y < subject.y) {
-        transposeAmount = -transposeAmount;
-      }
-
-      var amendedPoint = transposePoint(closestIntersection, angle, transposeAmount);
-
-      appendCircle(closestIntersection);
-
-      firstPath.points.splice(-1, 0, amendedPoint);
+      var closestWaypoint = getNextWaypoint(subject, waypoints, line);
+      firstPath.points.splice(-1, 0, closestWaypoint);
     });
 });
 
@@ -86,23 +126,3 @@ intersectingLines = findIntersections(firstPath, [walls[6]]);
 
 showIntersections(intersectingLines);
 
-intersectingLines.forEach(function(line) {
-  var angle = getAngle(line.points[0], line.points[1]);
-
-  line.intersection.points
-    .forEach(function(subject) {
-      var points = line.points;
-      var closestIntersection = getClosestPoint(subject, points[0], points[1]);
-
-      var transposeAmount = 20;
-      if (closestIntersection.y < subject.y) {
-        transposeAmount = -transposeAmount;
-      }
-
-      var amendedPoint = transposePoint(closestIntersection, angle, transposeAmount);
-
-      // appendCircle(closestIntersection);
-
-      firstPath.points.splice(-1, 0, amendedPoint);
-    });
-});
