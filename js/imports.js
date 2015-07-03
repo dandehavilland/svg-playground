@@ -1,32 +1,26 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+window.getDistance = function(subject, waypoint) {
+  return Math.sqrt(
+    Math.abs((waypoint.x - subject.x)^2) +
+    Math.abs((waypoint.y - subject.y)^2)
+  );
+};
+
 window.getNextWaypoint = function(subject, waypoints, line) {
-  var delta = 0,
-    closestWaypoint = null;
+  var closest;
 
-  waypoints.forEach(function(waypoint, index) {
-    var waypointDeltaX = waypoint.x - subject.x;
-    var waypointDeltaY = waypoint.y - subject.y;
+  // sort waypoints by distance from the subject
+  var waypointsByDistance = waypoints
+    .slice()
+    .sort(function(a, b) {
+      return getDistance(subject, a) - getDistance(subject, b);
+    });
 
-    var waypointDelta = Math.sqrt(Math.abs(waypointDeltaX^2) + Math.abs(waypointDeltaY^2));
-
-    console.log('waypoint', index, 'deltas', waypointDelta, delta);
-
-    if (delta === 0 || waypointDelta < delta) {
-      var alreadyVisitingWaypoint = line.points
-        .filter(function(point) {
-          return (point.x === waypoint.x && point.y === waypoint.y);
-        });
-
-      if (alreadyVisitingWaypoint.length > 0) {
-        return;
-      }
-
-      delta = waypointDelta;
-      closestWaypoint = waypoint;
-    }
+  waypointsByDistance.forEach(function(wp, idx) {
+    console.log(idx, wp.distance);
   });
 
-  return closestWaypoint;
+  return waypointsByDistance[0];
 };
 
 window.showIntersections = function(intersectingLines) {

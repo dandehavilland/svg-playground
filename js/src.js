@@ -1,31 +1,26 @@
-window.getNextWaypoint = function(subject, waypoints, line) {
-  var delta = 0,
-    closestWaypoint = null;
+window.getDistance = function(subject, waypoint) {
+  return Math.sqrt(
+    Math.abs((waypoint.x - subject.x)^2) +
+    Math.abs((waypoint.y - subject.y)^2)
+  );
+};
 
-  waypoints.forEach(function(waypoint, index) {
-    var waypointDeltaX = waypoint.x - subject.x;
-    var waypointDeltaY = waypoint.y - subject.y;
+window.getSortedWaypoints = function(subject, waypoints) {
+  return waypoints
+    .slice()
+    .sort(function(a, b) {
+      return getDistance(subject, a) - getDistance(subject, b);
+    });
+};
 
-    var waypointDelta = Math.sqrt(Math.abs(waypointDeltaX^2) + Math.abs(waypointDeltaY^2));
+window.findPath = function(subject, waypoints, line) {
+  var sortedWaypoints = getSortedWaypoints();
+  var closestWaypoint = sortedWaypoints[0];
 
-    console.log('waypoint', index, 'deltas', waypointDelta, delta);
-
-    if (delta === 0 || waypointDelta < delta) {
-      var alreadyVisitingWaypoint = line.points
-        .filter(function(point) {
-          return (point.x === waypoint.x && point.y === waypoint.y);
-        });
-
-      if (alreadyVisitingWaypoint.length > 0) {
-        return;
-      }
-
-      delta = waypointDelta;
-      closestWaypoint = waypoint;
-    }
-  });
-
-  return closestWaypoint;
+  // breadth first
+  // recursively check if
+  // if a path using the closest waypoint still encounters the same obstacle
+  // try another waypoint
 };
 
 window.showIntersections = function(intersectingLines) {

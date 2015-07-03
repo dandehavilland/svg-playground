@@ -101,15 +101,27 @@ var intersectingLines = findIntersections(firstPath, walls);
 showIntersections(intersectingLines);
 
 // extrapolate new coordinates based on intersections
-intersectingLines.forEach(function(line) {
+while (intersectingLines.length > 0) {
+  var line = intersectingLines.shift();
   var angle = getAngle(line.points[0], line.points[1]);
 
   line.intersection.points
     .forEach(function(subject) {
       var closestWaypoint = getNextWaypoint(subject, waypoints, line);
-      firstPath.points.splice(-1, 0, closestWaypoint);
+
+      var checkPoints = firstPath.points.slice().splice(-1, 0, closestWaypoint);
+      var checkIntersections = findIntersections({points: checkPoints}, walls);
+
+      if (checkIntersections.length === 0) {
+        firstPath.points.splice(-1, 0, closestWaypoint);
+      } else {
+        return;
+      }
     });
-});
+  // if (intersectingLines.length === 0) {
+  //   intersectingLines = findIntersections(firstPath, walls);
+  // }
+}
 
 var lineGen = d3.svg.line()
   .x(function(d) { return d.x; })
