@@ -1,6 +1,7 @@
 var count = 0;
 function findPath(path, waypoints, depth) {
-  var points = path.points.slice();
+  var points = path.points.slice(),
+    result;
 
   if (typeof depth === 'undefined') {
     depth = 0;
@@ -8,8 +9,9 @@ function findPath(path, waypoints, depth) {
 
   // try direct path
   var intersection = findFirstIntersection({points: points}, walls);
-  if (!intersection) { return points; }
-
+  if (!intersection) {
+    result = points;
+  }
   else {
 
     if (waypoints.length === 0) {
@@ -38,9 +40,32 @@ function findPath(path, waypoints, depth) {
       }
     }
   }
+
+  // second pass on the waypoints to check if they're all strictly necessary
+  for (var i = result.length-2; i > 0; i--) {
+    var testPath = result.slice();
+    testPath.splice(i,1);
+    var intersection = findFirstIntersection({points: testPath}, walls);
+    if (!intersection) {
+      result.splice(i,1);
+      i++;
+    }
+  }
+
+  return result;
 }
 
+var ITERATIONS = 1;
 
-var validPoints = findPath(firstPath, waypoints);
-console.log(validPoints);
-path.datum(validPoints).attr('d', lineGen);
+d3.select('svg').on('click', function() {
+  var then = new Date();
+  for (var i = 0; i < ITERATIONS; i++) {
+    var coords = d3.mouse(this);
+    firstPath.points[1] = {x: coords[0], y: coords[1]};
+    var validPoints = findPath(firstPath, waypoints);
+    path.datum(validPoints).attr('d', lineGen);
+  }
+  var now = new Date();
+
+  console.log(ITERATIONS, ' iterations:', now-then, 'ms');
+});

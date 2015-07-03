@@ -5,7 +5,7 @@ var firstPath = {
   type: 'L',
   points: [
     {x: pois[0].cx, y: pois[0].cy},
-    {x: pois[4].cx, y: pois[4].cy},
+    {x: pois[3].cx, y: pois[4].cy},
   ],
   intersections: []
 };
@@ -88,11 +88,11 @@ d3.select('svg g#waypoints')
     .text(function(d, i) {return i;});
 
 // draw our test path
-d3.select('svg g#paths')
-  .append('path')
-    .classed('path', true)
-    .datum(firstPath)
-    .attr('d', pathData);
+// var directPath = d3.select('svg g#paths')
+//   .append('path')
+//     .classed('path', true)
+//     .datum(firstPath)
+//     .attr('d', pathData);
 
 var lineGen = d3.svg.line()
   .x(function(d) { return d.x; })
@@ -101,9 +101,9 @@ var lineGen = d3.svg.line()
 
 var path = d3.select('svg g#paths')
   .append('path')
-    .classed('path alternative', true)
-    .datum(firstPath.points)
-    .attr('d', lineGen);
+    .classed('path alternative', true);
+    // .datum(firstPath.points)
+    // .attr('d', lineGen);
 
 // // calculate intersections points for the test path
 // var intersection = findFirstIntersection(firstPath, walls);
