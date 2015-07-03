@@ -5,7 +5,7 @@ var firstPath = {
   type: 'L',
   points: [
     {x: pois[0].cx, y: pois[0].cy},
-    {x: pois[1].cx, y: pois[1].cy},
+    {x: pois[4].cx, y: pois[4].cy},
   ],
   intersections: []
 };
