@@ -4,7 +4,6 @@
   "description": "",
   "main": "js/playground.js",
   "dependencies": {
-    "browserify": "^10.2.4",
     "d3": "^3.5.5",
     "jquery": "^2.1.4",
     "kld-intersections": "thelonious/kld-intersections#development"
