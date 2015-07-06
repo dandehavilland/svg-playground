@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>SVG</title>
+
+    <script src="node_modules/kld-intersections/node_modules/kld-affine/lib/Matrix2D.js" type="text/javascript" charset="utf-8"></script>
+    <script src="node_modules/kld-intersections/node_modules/kld-affine/lib/Point2D.js" type="text/javascript" charset="utf-8"></script>
+    <script src="node_modules/kld-intersections/node_modules/kld-affine/lib/Vector2D.js" type="text/javascript" charset="utf-8"></script>
+    <script src="node_modules/kld-intersections/node_modules/kld-polynomial/lib/Polynomial.js" type="text/javascript" charset="utf-8"></script>
+    <script src="node_modules/kld-intersections/node_modules/kld-polynomial/lib/SqrtPolynomial.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="node_modules/kld-intersections/lib/intersectionParams.js" type="text/javascript" charset="utf-8"></script>
+    <script src="node_modules/kld-intersections/lib/intersection.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="node_modules/d3/d3.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/data.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/setup.js" type="text/javascript" charset="utf-8" defer="defer"></script>
+    <script src="js/playground.js" type="text/javascript" charset="utf-8" defer="defer"></script>
+
+    <style type="text/css" media="screen">
+      svg path.wall {
+        fill: none;
+        stroke: black;
+      }
+
+      svg circle.poi {
+        fill: green;
+        stroke: black;
+      }
+
+      svg path.path {
+        fill: none;
+        stroke: red;
+      }
+
+      svg path.path.alternative {
+        fill: none;
+        stroke: green;
+      }
+
+      svg circle.intersection {
+        fill: red;
+        stroke: black;
+        stroke-width: 0.5px;
+      }
+
+      svg circle.waypoint {
+        fill: blue;
+        stroke: black;
+        stroke-width: 0.5px;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="1200" height="800">
+      <g id="walls"></g>
+      <g id="annotations"></g>
+      <g id="pois"></g>
+      <g id="waypoints"></g>
+      <g id="paths"></g>
+      <g id="intersections"></g>
+    </svg>
+  </body>
+</html>
