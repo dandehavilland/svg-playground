@@ -83,18 +83,19 @@ calcIntersections = function(subjectPath, otherPath) {
       pb = otherPath.points,
       result = [];
 
-  for (var i = 0; i < pa.length-1; i++) {
-    for (var j = 0; j < pb.length-1; j++) {
-      var intersection = Isx.intersectLineLine(pa[i], pa[i+1], pb[j], pb[j+1]);
-      if (intersection.status === 'Intersection') {
+  // for (var i = 0; i < pa.length-1; i++) {
+  //   for (var j = 0; j < pb.length-1; j++) {
+      var shape1 = IntersectionParams.newPolyline(pa);
+      var shape2 = IntersectionParams.newPolyline(pb);
+      var intersection = Intersection.intersectShapes(shape1, shape2);
+      if (intersection.points.length >= 1) {
         result.push({
           fullPath: otherPath,
-          points: [pb[j], pb[j+1]],
           intersection: intersection
         });
       }
-    }
-  }
+  //   }
+  // }
   return result;
 };
 
@@ -186,10 +187,7 @@ findIntersections = function(subject, obstacles) {
   return obstacles
     .reduce(function(memo, obstacle, idx) {
       return memo.concat(calcIntersections(subject, obstacle));
-    }, [])
-    .filter(function(line) {
-      return line.intersection.status === 'Intersection';
-    });
+    }, []);
 };
 
 findFirstIntersection = function(subject, obstacles) {

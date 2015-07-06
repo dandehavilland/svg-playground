@@ -7,12 +7,11 @@
     "browserify": "^10.2.4",
     "d3": "^3.5.5",
     "jquery": "^2.1.4",
-    "kld-intersections": "^0.1.1"
+    "kld-intersections": "thelonious/kld-intersections#development"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ./node_modules/browserify/bin/cmd.js ./js/src.js -o ./js/imports.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT"
