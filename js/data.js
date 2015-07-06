@@ -83,8 +83,7 @@ window.pois = [
     cx: 1000,
     cy: 100,
     r: 25
-  }
-  ,{
+  },{
     type: 'circle',
     cx: 320,
     cy: 300,

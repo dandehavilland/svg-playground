@@ -8,7 +8,7 @@ function findPath(path, waypoints, depth) {
   }
 
   // try direct path
-  var intersection = findFirstIntersection({points: points}, walls);
+  var intersection = findFirstIntersection({points: points}, [].concat(pois));
   if (!intersection) {
     result = points;
   }

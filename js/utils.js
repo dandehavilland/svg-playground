@@ -79,23 +79,25 @@ pathToPoints = function(pathString) {
 };
 
 calcIntersections = function(subjectPath, otherPath) {
-  var pa = subjectPath.points,
-      pb = otherPath.points,
-      result = [];
+  var result = [];
+  var shape1 = IntersectionParams.newPath(subjectPath.points);
+  var shape2;
 
-  // for (var i = 0; i < pa.length-1; i++) {
-  //   for (var j = 0; j < pb.length-1; j++) {
-      var shape1 = IntersectionParams.newPolyline(pa);
-      var shape2 = IntersectionParams.newPolyline(pb);
-      var intersection = Intersection.intersectShapes(shape1, shape2);
-      if (intersection.points.length >= 1) {
-        result.push({
-          fullPath: otherPath,
-          intersection: intersection
-        });
-      }
-  //   }
-  // }
+  switch(otherPath.type) {
+    case 'circle':
+      shape2 = IntersectionParams.newCircle(new Point2D(otherPath.cx, otherPath.cy), otherPath.r);
+    default:
+      shape2 = IntersectionParams.newPath(otherPath.points);
+  }
+
+  var intersection = Intersection.intersectShapes(shape1, shape2);
+  if (intersection.points.length >= 1) {
+    result.push({
+      fullPath: otherPath,
+      intersection: intersection
+    });
+  }
+
   return result;
 };
 
