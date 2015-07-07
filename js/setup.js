@@ -87,112 +87,13 @@ d3.select('svg g#waypoints')
     })
     .text(function(d, i) {return i;});
 
-// draw our test path
-// var directPath = d3.select('svg g#paths')
-//   .append('path')
-//     .classed('path', true)
-//     .datum(firstPath)
-//     .attr('d', pathData);
+d3.select('select[name="style"]').on('change', function() {
+  switch d3.select(this).property('value') {
+  case: 'color':
+  case: 'color-weight':
+  case: 'heat'
+  default:
+    break;
+  }
 
-var lineGen = d3.svg.line()
-  .x(function(d) { return d.x; })
-  .y(function(d) { return d.y; })
-  .interpolate('cardinal');
-
-var path = d3.select('svg g#paths')
-  .append('path')
-    .classed('path alternative', true);
-    // .datum(firstPath.points)
-    // .attr('d', lineGen);
-
-// // calculate intersections points for the test path
-// var intersection = findFirstIntersection(firstPath, walls);
-//
-// // display intersections
-// // showIntersections([intersectingLine]);
-// var sortedWaypoints = getSortedWaypoints(intersection, waypoints);
-// var depth = 0;
-// var heap = [];
-//
-//
-//
-// var findPath = function(depth) {
-//   var viablePath;
-//   for (var i = 0;  i < depth; i++) {
-//     findPath(depth-1)
-//   }
-// };
-//
-// while (intersection && sortedWaypoints.length >= 0) {
-//   if (sortedWaypoints.length === 0) {
-//     sortedWaypoints = getSortedWaypoints(intersection, waypoints);
-//     if (depth < sortedWaypoints.length) {
-//       heap = [sortedWaypoints[depth]];
-//
-//     } else {
-//       break;
-//     }
-//   }
-//
-//   console.log(intersection);
-//   appendCircle(intersection);
-//   // var completePath = findPath(intersection, waypoints, firstPath.points, walls)
-//   var waypoint = sortedWaypoints[0];
-//   var sortedWaypoints = getSortedWaypoints(intersection, sortedWaypoints.slice(1));
-//
-//   var testPath = {points: firstPath.points.slice()};
-//
-//   heap.forEach(function(wp) {
-//     testPath.points.splice(-1,0,wp);
-//   });
-//
-//   testPath.points.splice(-1,0,waypoint);
-//   intersection = findFirstIntersection(testPath, walls);
-//
-//   path.datum(testPath.points).attr('d', lineGen);
-//
-//   depth++;
-// }
-
-
-
-
-
-
-// extrapolate new coordinates based on intersections
-// while (intersectingLines.length > 0) {
-//   var line = intersectingLines.shift();
-//
-//   line.intersection.points
-//     .forEach(function(subject) {
-//       // var closestWaypoint = getNextWaypoint(subject, waypoints, line);
-//       //
-//       // var checkPoints = firstPath.points.slice().splice(-1, 0, closestWaypoint);
-//       // var checkIntersections = findIntersections({points: checkPoints}, walls);
-//       //
-//       // if (checkIntersections.length === 0) {
-//       //   firstPath.points.splice(-1, 0, closestWaypoint);
-//       // } else {
-//       //   return;
-//       // }
-//
-//
-//       console.log(complatePath);
-//     });
-//   // if (intersectingLines.length === 0) {
-//   //   intersectingLines = findIntersections(firstPath, walls);
-//   // }
-// }
-
-
-//
-// d3.select('svg g#paths')
-//   .append('path')
-//     .classed('path alternative', true)
-//     .datum(firstPath.points)
-//     .attr('d', lineGen);
-//
-// intersectingLines = findIntersections(firstPath, [walls[6]]);
-//
-// showIntersections(intersectingLines);
-
+});

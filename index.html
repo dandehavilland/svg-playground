@@ -21,6 +21,16 @@
     <script src="js/playground.js" type="text/javascript" charset="utf-8" defer="defer"></script>
 
     <style type="text/css" media="screen">
+      body {
+        font-family: "Helvetica Neue", sans-serif;
+        font-size: 12px;
+      }
+
+      label {
+        display: inline-block;
+        padding-right: 30px;
+      }
+
       svg path.wall {
         fill: none;
         stroke: black;
@@ -33,7 +43,13 @@
 
       svg path.path {
         fill: none;
-        stroke: red;
+        opacity: 0.4;
+        cursor: pointer;
+      }
+
+      svg path.path:hover {
+        fill: none;
+        opacity: 1;
       }
 
       svg path.path.alternative {
@@ -53,9 +69,29 @@
         stroke-width: 0.5px;
         opacity: 0.5;
       }
+
+      div.options {
+        padding: 5px 0 10px;
+      }
     </style>
   </head>
   <body>
+    <div class="options">
+      <label>
+        Style:
+        <select name="style">
+          <option value="color">Color</option>
+          <option value="color-weight">Color + Weight</option>
+          <option value="heat">Heat</option>
+        </select>
+      </label>
+
+      <label>
+        Waypoints:
+        <input type="checkbox" name="waypoints" value="1" id="waypoints" />
+      </label>
+    </div>
+
     <svg width="1200" height="800">
       <g id="walls"></g>
       <g id="annotations"></g>
