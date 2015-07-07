@@ -1,11 +1,7 @@
 var count = 0;
-function findPath(path, waypoints, depth) {
+function findPath(path, waypoints) {
   var points = path.points.slice(),
     result;
-
-  if (typeof depth === 'undefined') {
-    depth = 0;
-  }
 
   // try direct path
   var intersection = findFirstIntersection({points: points}, walls);
@@ -34,21 +30,30 @@ function findPath(path, waypoints, depth) {
         continue;
       }
 
-      var testPoints = findPath({points: testPoints}, testWaypoints, depth+1);
+      var testPoints = findPath({points: testPoints}, testWaypoints);
       if (testPoints) {
         return testPoints;
       }
     }
   }
 
-  // second pass on the waypoints to check if they're all strictly necessary
-  for (var i = result.length-2; i > 0; i--) {
-    var testPath = result.slice();
-    testPath.splice(i,1);
-    var intersection = findFirstIntersection({points: testPath}, walls);
-    if (!intersection) {
-      result.splice(i,1);
-      i++;
+  if (!result) {
+    console.debug('Could not find path between those two points');
+    return [];
+  }
+
+  // check if we can remove any loops
+  for (var start = 1; start < result.length-2; start++) {
+    for (var count = 1; count < result.length-start; count++) {
+      var testPath = result.slice();
+      testPath.splice(start, count);
+
+      var intersection = findFirstIntersection({points: testPath}, walls);
+      if (!intersection) {
+        result = testPath;
+        start = 1;
+        count = 1;
+      }
     }
   }
 
